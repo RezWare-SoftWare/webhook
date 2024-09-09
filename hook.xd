@@ -1,0 +1,24 @@
+_G.webhook = "https://discord.com/api/webhooks/1282745410666102844/WeLrRmPhOrEBJoCiBdCpJhA3M8xT-9hMOLGSwieiaRK4r8duNcX2pY0ZbU5kgmULjYo_"
+
+local HttpService = game:GetService("HttpService")
+
+function sendDiscordMessage(content)
+    -- Сообщение для отправки
+    local messageData = {
+        ["content"] = content
+    }
+
+    -- Преобразуем в JSON
+    local jsonData = HttpService:JSONEncode(messageData)
+
+    -- Отправляем запрос
+    local success, err = pcall(function()
+        HttpService:PostAsync(_G.webhook, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+
+    if success then
+        print("Сообщение успешно отправлено!")
+    else
+        warn("Ошибка при отправке сообщения: " .. tostring(err))
+    end
+end
