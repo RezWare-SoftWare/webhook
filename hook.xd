@@ -22,4 +22,3 @@ function sendDiscordMessage(message)
         warn("Ошибка при отправке сообщения: " .. tostring(response))
     end
 end
-Как это испол
