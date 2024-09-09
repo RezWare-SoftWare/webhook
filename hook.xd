@@ -1,24 +1,31 @@
 local HttpService = game:GetService("HttpService")
 
 -- Вставьте ваш вебхук URL сюда
-_G.webhookUrl = _G.webhookUrl or "https://discord.com/api/webhooks/1282745410666102844/WeLrRmPhOrEBJoCiBdCpJhA3M8xT-9hMOLGSwieiaRK4r8duNcX2pY0ZbU5kgmULjYo_"
+_G.webhookUrl = "https://discord.com/api/webhooks/1282745410666102844/WeLrRmPhOrEBJoCiBdCpJhA3M8xT-9hMOLGSwieiaRK4r8duNcX2pY0ZbU5kgmULjYo_"
 
+-- Минимальная функция для тестирования отправки сообщения
 function sendDiscordMessage(message)
     local messageData = {
         ["content"] = message
     }
 
-    -- Преобразование таблицы сообщения в JSON формат
     local jsonData = HttpService:JSONEncode(messageData)
 
-    -- Отправка POST запроса на вебхук
     local success, response = pcall(function()
-        return HttpService:PostAsync(_G.webhookUrl, jsonData, Enum.HttpContentType.ApplicationJson)
+        return HttpService:RequestAsync({
+            Url = _G.webhookUrl,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = jsonData
+        })
     end)
 
-    if success then
+    if success and response.Success then
         print("Сообщение отправлено: " .. message)
     else
         warn("Ошибка при отправке сообщения: " .. tostring(response))
     end
 end
+
+-- Вызов функции для тестирования
+sendDiscordMessage("test")
